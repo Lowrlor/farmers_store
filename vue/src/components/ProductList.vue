@@ -16,7 +16,7 @@
             .input-product-weight
               p Грам: {{ product.weight }}
               input(type='number' v-model='product.weight' step='100' min='100')
-            .button-addToBasket
+            .button-addToBasket(v-if='product.weight > 300')
               button(@click='addToBacketList(product._id, product.cost * product.weight / 1000, product.weight)').button-addToBasket Добавити в корзину
             .button-removeProduct
               button(@click='removeProduct(index, product._id, product.cost * product.weight / 1000)') Видалити
@@ -86,13 +86,9 @@ export default {
     },
     addToBacketList (productId, productCost, productWeight) {
       this.$store.dispatch('basket/addToBasketList', { productId, productCost, productWeight })
-        .then((res) => {
+        .then(() => {
           localStorage.setItem('list', JSON.stringify(this.$store.state.basket.basketList))
-          let total = parseInt(localStorage.getItem('total'))
-          console.log(productCost)
-          total += parseInt(productCost)
-          this.$store.state.basket.total = total
-          localStorage.setItem('total', total)
+          localStorage.setItem('total', this.$store.state.basket.total)
         })
     },
     setBacketList (products) {
@@ -161,6 +157,7 @@ $breakpoint-tablet: 768px
   margin-right: auto
   padding-left: $gap / 2 / 16 * 1rem
   padding-right: $gap / 2 / 16 * 1rem
+  min-height: 25rem
 .row
   display: flex
   flex-wrap: wrap

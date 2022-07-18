@@ -7,18 +7,24 @@ export default {
   },
   mutations: {
     ADDTOBASKETLIST (state, product) {
-      state.basketList.push(product)
-      state.basketList.forEach((item, i) => {
-        for (let j = 0; j < state.basketList.length; j++) {
-          if (item.name === state.basketList[j].name && i !== j) {
-            console.log(product)
-            state.basketList[i].cost += state.basketList[j].cost
-            state.basketList[i].weight += state.basketList[j].weight
-            state.basketList[i].weight.toFixed(2)
-            state.basketList.splice(j, 1)
+      if (state.basketList.length === 0) {
+        console.log('asdasd')
+        state.basketList.push(product)
+        state.total = state.basketList[0].cost
+      } else {
+        state.basketList.push(product)
+        state.basketList.forEach((item, i) => {
+          for (let j = 0; j < state.basketList.length; j++) {
+            if (item.name === state.basketList[j].name && i !== j) {
+              state.basketList[i].cost += state.basketList[j].cost
+              state.basketList[i].weight += state.basketList[j].weight
+              state.basketList[i].weight.toFixed(2)
+              state.basketList.splice(j, 1)
+              state.total = state.basketList[i].cost
+            }
           }
-        }
-      })
+        })
+      }
     },
     SETBASKETLIST (state, products) {
       products.forEach((item, i) => {
@@ -27,6 +33,7 @@ export default {
     },
     REMOVEFROMBUSKET (state, payload) {
       state.basketList.splice(payload.index, 1)
+      console.log(payload.productCost)
       state.total -= payload.productCost
     },
     REMOVEALLFROMBUSKET (state) {

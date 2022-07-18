@@ -4,6 +4,8 @@
     .wrapper
       .close(@click="$emit('close-modal')")
         p Close
+      .text(v-if='basketTotal < 20')
+        p Мінімальна сума замовлення 20 грн
       .products
         .row
           ul(v-for="productBasket, index in basketList" :key='productBasket._id').col.col-desktop-1-3.col-tablets-1-2.col-phone-1-1.m-b-2
@@ -12,7 +14,7 @@
               .product-name Назва: {{productBasket.name}}
               .product-cost Ціна: {{productBasket.cost }}
               .product-weight Вага: {{productBasket.weight }}
-              button.button-remove(@click='removeFromBasket(index, productBasket.cost * productBasket.weight / 1000)') Видалити
+              button.button-remove(@click='removeFromBasket(index, productBasket.cost)') Видалити
           .button-removeAll
             button(@click='removeAllFromBasket()') Видалити все
           .button-createOrder
