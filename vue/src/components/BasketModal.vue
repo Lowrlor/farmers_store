@@ -1,26 +1,26 @@
 <template lang='pug'>
 .modal-overlay(@click="$emit('close-modal')")
   .modal(@click.stop)
-    .wrapper
+    .modal-top
       .close(@click="$emit('close-modal')")
         p Close
-      .text(v-if='basketTotal < 20')
-        p Мінімальна сума замовлення 20 грн
-      .products
-        .row
-          ul(v-for="productBasket, index in basketList" :key='productBasket._id').col.col-desktop-1-3.col-tablets-1-2.col-phone-1-1.m-b-2
-            .productBasket
-              img(v-bind:src="'http://localhost:2000/' + productBasket.img").img
-              .product-name Назва: {{productBasket.name}}
-              .product-cost Ціна: {{productBasket.cost }}
-              .product-weight Вага: {{productBasket.weight }}
-              button.button-remove(@click='removeFromBasket(index, productBasket.cost)') Видалити
-          .button-removeAll
-            button(@click='removeAllFromBasket()') Видалити все
-          .button-createOrder
-            button(@click='createOrder(basketList)') Оплатити
-          .total
-            p {{ basketTotal }}
+      .button-removeAll
+        button(@click='removeAllFromBasket()') Видалити все
+      .button-createOrder
+        button(@click='createOrder(basketList)') Оплатити
+      .total
+        p {{ basketTotal }}
+    .text(v-if='basketTotal < 20')
+      p Мінімальна сума замовлення 20 грн
+    .products
+      .row
+        ul(v-for="productBasket, index in basketList" :key='productBasket._id').col.col-desktop-1-3.col-tablets-1-2.col-phone-1-1.m-b-2
+          .productBasket
+            img(v-bind:src="'http://localhost:2000/' + productBasket.img").img
+            .product-name Назва: {{productBasket.name}}
+            .product-cost Ціна: {{productBasket.cost }}
+            .product-weight Вага: {{productBasket.weight }}
+            button.button-remove(@click='removeFromBasket(index, productBasket.cost)') Видалити
 </template>
 
 <script>
@@ -100,6 +100,7 @@ export default {
   margin-top: 90px
   border-radius: 20px
   position: absolute
+  min-height: 25rem
 
 .close
   cursor: pointer

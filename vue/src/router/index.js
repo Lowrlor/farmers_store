@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ProductList from '../views/ProductList.vue'
+import MainPage from '../views/MainPage.vue'
 import NewProduct from '../views/NewProduct.vue'
 import SuccessfulOrder from '../views/SuccessfulOrder.vue'
 
@@ -7,7 +7,7 @@ const routes = [
   {
     path: '/',
     name: 'list',
-    component: ProductList
+    component: MainPage
   },
   {
     path: '/NewProduct',

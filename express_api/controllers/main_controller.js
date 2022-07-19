@@ -86,7 +86,7 @@ exports.removeOne = function (req, res) {
     })
   })
 }
-exports.testCreate = function (req, res) {
+exports.stripePayment = function (req, res) {
   var productsPrice = 0
   var description = ''
   req.body.basketList.forEach((item, i) => {
