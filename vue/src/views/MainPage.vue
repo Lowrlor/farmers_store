@@ -2,6 +2,7 @@
 BasketModal(:showingModal = 'showingModal' @modal-Controll='modalControll')
 p(@click='modalControll(showingModal)') Корзина
 ProductList
+p {{ user }}
 </template>
 
 <script>
@@ -21,6 +22,9 @@ export default {
     }
   },
   computed: {
+    user () {
+      return this.$store.state.user.user
+    }
   },
   methods: {
     modalControll (showingModal) {

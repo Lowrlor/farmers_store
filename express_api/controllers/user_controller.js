@@ -4,16 +4,17 @@ var jwt = require('jsonwebtoken')
 const UserSchema = require('../models/user.models.js')
 
 exports.register = function (req, res) {
-  if (!req.body.email || !req.body.password) res.json({ secuses: false, error: 'Bad req'})
+  console.log(req.body)
+  if (!req.body.email || !req.body.password) res.sendStatus(500)
   console.log(req.body)
   var user = req.body
   const doc = new UserSchema({
     email: req.body.email,
-    password: Bcrypt.hashSync(req.body.password)
+    password: bcrypt.hashSync(req.body.password)
   })
   doc.save((err) => {
-    if (err) return res.json({secuses: false, err}).status(400)
-    else res.json({secuses: true, user: req.body}).status(200)
+    if (err) return res.sendStatus(400)
+    else res.json({secuses: true, user: req.body})
   })
 }
 exports.login = function (req, res) {
@@ -22,19 +23,22 @@ exports.login = function (req, res) {
     .then((user) => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = generateToken(user);
+        console.log(user)
         res.status(200).json({
-          user_id: user._id,
-          email: user.email,
-          role: user.role,
-          token: token
+          user: {
+            user_id: user._id,
+            email: user.email,
+            role: user.role,
+            token: token
+          }
         });
       } else {
-        res.status(401).json({ message: "Invalid Credentials" });
+        res.sendStatus(401)
       }
     })
     .catch((err) => {
       console.log(err)
-      res.status(500).json(err)
+      res.sendStatus(500)
     });
     function generateToken(user) {
       const payload = {

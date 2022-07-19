@@ -1,16 +1,24 @@
 <template lang='pug'>
 .form-auth
-  AuthForm
+  RegisterForm(v-if='type == "register"')
+  LoginForm(v-if='type == "login"')
 </template>
 
 <script>
 // @ is an alias to /src
-import AuthForm from '@/components/AuthForm.vue'
+import RegisterForm from '@/components/RegisterForm.vue'
+import LoginForm from '@/components/LoginForm.vue'
 
 export default {
-  name: 'NewProductView',
+  name: 'AuthPage',
   components: {
-    AuthForm
+    RegisterForm,
+    LoginForm
+  },
+  computed: {
+    type () {
+      return this.$route.params.type
+    }
   }
 }
 </script>

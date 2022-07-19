@@ -1,6 +1,6 @@
 <template lang='pug'>
-.form-auth
-  form(@submit.prevent='auth(user, type)')
+.form-auth-register
+  form(@submit.prevent='register(user)')
     .input-email
       input(v-model='user.email' placeholder='email')
     .input-password
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'AuthForm',
+  name: 'RegisterForm',
   props: {
   },
   data () {
@@ -22,17 +22,17 @@ export default {
       }
     }
   },
-  computed: {
-    type () {
-      return this.$route.params.type
-    }
-  },
-  mounted () {
-    console.log(this.type)
-  },
   methods: {
-    auth (user, type) {
-      console.log(user)
+    register (user) {
+      this.$store.dispatch('user/register', user)
+        .then(secuses => {
+          if (secuses) {
+            this.$router.push('/')
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 }
