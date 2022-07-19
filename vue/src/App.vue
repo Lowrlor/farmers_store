@@ -2,9 +2,24 @@
 .wraper
   a(href='/NewProduct') NewProduct
   a(href='/') Main
+  PagesTop
   <router-view/>
 </template>
 
+<script>
+// @ is an alias to /src
+import PagesTop from '@/components/PagesTop.vue'
+export default {
+  name: 'ProductListView',
+  components: {
+    PagesTop
+  },
+  data () {
+    return {
+    }
+  }
+}
+</script>
 <style lang="sass">
 $siteWidth: 1500
 $gap: 30

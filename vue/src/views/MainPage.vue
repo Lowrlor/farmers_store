@@ -1,21 +1,38 @@
 <template lang='pug'>
-MainPageTop
+BasketModal(:showingModal = 'showingModal' @modal-Controll='modalControll')
+p(@click='modalControll(showingModal)') Корзина
 ProductList
 </template>
 
 <script>
 // @ is an alias to /src
 import ProductList from '@/components/ProductList.vue'
-import MainPageTop from '@/components/MainPageTop.vue'
+import BasketModal from '@/components/BasketModal.vue'
 
 export default {
   name: 'ProductListView',
   components: {
     ProductList,
-    MainPageTop
+    BasketModal
   },
   data () {
     return {
+      showingModal: false
+    }
+  },
+  computed: {
+  },
+  methods: {
+    modalControll (showingModal) {
+      console.log(showingModal)
+      if (showingModal) {
+        this.showingModal = false
+        document.body.style.overflow = 'auto'
+        console.log(showingModal)
+      } else {
+        this.showingModal = true
+        document.body.style.overflow = 'hidden'
+      }
     }
   }
 }

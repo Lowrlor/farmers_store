@@ -1,8 +1,8 @@
 <template lang='pug'>
-.modal-overlay(@click="$emit('close-modal')")
+.modal-overlay(@click="$emit('modalControll', showingModal)" v-if='showingModal')
   .modal(@click.stop)
     .modal-top
-      .close(@click="$emit('close-modal')")
+      .close(@click="closeModal")
         p Close
       .button-removeAll
         button(@click='removeAllFromBasket()') Видалити все
@@ -32,14 +32,22 @@ export default {
       basketList: this.$store.state.basket.basketList
     }
   },
+  emits: [
+    'modalControll'
+  ],
   computed: {
     basketTotal () {
       return this.$store.state.basket.total
     }
   },
   props: {
+    showingModal: Boolean
   },
   methods: {
+    closeModal () {
+      this.$emit('modal-Controll', this.showingModal)
+      document.body.style.overflow = 'auto'
+    },
     removeFromBasket (index, productCost) {
       this.$store.dispatch('basket/removeFromBasket', { index, productCost })
         .then(() => {

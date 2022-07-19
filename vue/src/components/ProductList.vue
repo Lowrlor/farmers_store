@@ -43,7 +43,6 @@ export default {
   data () {
     return {
       productList: [],
-      showModal: false,
       isEditing: false,
       editingIndex: -1,
       newImg: undefined

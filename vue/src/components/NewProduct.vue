@@ -1,5 +1,5 @@
 <template lang='pug'>
-.form
+.form-addProduct
   form(@submit.prevent='addProduct(newProduct)')
     .input-img
       input(type='file' @change='onFileChange')
