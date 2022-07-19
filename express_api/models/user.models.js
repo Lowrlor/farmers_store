@@ -10,7 +10,7 @@ const userSchema = new Schema({
     type: String,
     required: [true, "Це поле є обов'язкове"]
   },
-  roll: Number
+  role: Number
 });
 userSchema.path('email').validate(function (value, respond) {
   return mongoose.model('User').count({ email: value }).exec().then(function (count) {
@@ -21,7 +21,7 @@ userSchema.path('email').validate(function (value, respond) {
     });
 }, 'Email already exists.');
 userSchema.pre("save", function(next) {
-    this.roll = 1
+    this.role = 1
     next()
 });
 module.exports = mongoose.model("User", userSchema)

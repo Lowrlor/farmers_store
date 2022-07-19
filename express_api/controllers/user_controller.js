@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const Bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs')
+var jwt = require('jsonwebtoken')
 const UserSchema = require('../models/user.models.js')
 
 exports.register = function (req, res) {
@@ -16,9 +17,36 @@ exports.register = function (req, res) {
   })
 }
 exports.login = function (req, res) {
-  var user = req.body
-  UserSchema.findOne({email: user.email}, function (err, doc) {
-    console.log(doc)
-    res.send(doc).status(200)
-  })
+  const { email, password } = req.body;
+  UserSchema.findOne({email})
+    .then((user) => {
+      console.log('bcrypt.compareSync(password, user.password')
+      if (user && bcrypt.compareSync(password, user.password)) {
+        console.log(user)
+        const token = generateToken(user);
+        res.status(200).json({
+          email: user.email,
+          role: user.role,
+          token: token
+        });
+      } else {
+        res.status(401).json({ message: "Invalid Credentials" });
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).json(err)
+    });
+    function generateToken(user) {
+      const payload = {
+        userid: user._id,
+        username: user.username,
+      };
+      const options = {
+        expiresIn: "1h",
+      };
+      const token = jwt.sign(payload, process.env.JWT_SECRET, options);
+
+      return token;
+    }
 }
