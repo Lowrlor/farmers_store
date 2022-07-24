@@ -10,12 +10,13 @@
           .input-product-weight
             p Грам: {{ product.weight }}
             input(type='number' v-model='product.weight' step='100' min='100')
-          .button-addToBasket(v-if='product.weight > 300')
+          .button-addToBasket(v-if='product.weight > 300 && !isUpdating')
             button(@click='addToBacketList(product._id, product.cost * product.weight / 1000, product.weight)').button-addToBasket Добавити в корзину
-          .button-removeProduct
-            button(@click='removeProduct(index, product._id, product.cost * product.weight / 1000)') Видалити
-          .button-edit
-            button(@click='isEditing = true, editingIndex = index') Редагувати
+          .button-admin(v-if='isUpdating')
+            .button-removeProduct
+              button(@click='removeProduct(index, product._id, product.cost * product.weight / 1000)') Видалити
+            .button-edit
+              button(@click='isEditing = true, editingIndex = index') Редагувати
         template(v-else)
           .input-product-file
             input.product-name-input(type='file' @change='onFileChange')
@@ -37,8 +38,7 @@ export default {
   components: {
   },
   props: {
-  },
-  computed: {
+    isUpdating: Boolean
   },
   data () {
     return {
@@ -46,6 +46,15 @@ export default {
       isEditing: false,
       editingIndex: -1,
       newImg: undefined
+    }
+  },
+  computed: {
+    role () {
+      if (this.$store.state.user.user) {
+        return this.$store.state.user.user.role
+      } else {
+        return false
+      }
     }
   },
   mounted () {

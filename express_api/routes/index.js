@@ -1,5 +1,6 @@
 var express = require('express')
 const multer  = require('multer')
+var jwt = require('jsonwebtoken')
 
 var router = express.Router()
 

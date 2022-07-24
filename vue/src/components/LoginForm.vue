@@ -27,6 +27,8 @@ export default {
       this.$store.dispatch('user/login', user)
         .then(secuses => {
           if (secuses) {
+            const token = this.$store.state.user.user.token
+            localStorage.setItem('token', token)
             this.$router.push('/')
           }
         })

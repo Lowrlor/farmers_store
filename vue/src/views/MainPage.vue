@@ -1,6 +1,4 @@
 <template lang='pug'>
-BasketModal(:showingModal = 'showingModal' @modal-Controll='modalControll')
-p(@click='modalControll(showingModal)') Корзина
 ProductList
 p {{ user }}
 </template>
@@ -8,35 +6,46 @@ p {{ user }}
 <script>
 // @ is an alias to /src
 import ProductList from '@/components/ProductList.vue'
-import BasketModal from '@/components/BasketModal.vue'
 
 export default {
   name: 'ProductListView',
   components: {
-    ProductList,
-    BasketModal
+    ProductList
   },
   data () {
     return {
-      showingModal: false
     }
   },
   computed: {
     user () {
       return this.$store.state.user.user
+    },
+    isAdmin () {
+      if (this.$store.state.user.user) {
+        if (this.$store.state.user.user.role < 1) {
+          return true
+        } else {
+          return false
+        }
+      } else {
+        return false
+      }
     }
   },
   methods: {
-    modalControll (showingModal) {
-      console.log(showingModal)
-      if (showingModal) {
-        this.showingModal = false
-        document.body.style.overflow = 'auto'
-        console.log(showingModal)
-      } else {
-        this.showingModal = true
-        document.body.style.overflow = 'hidden'
-      }
+  },
+  mounted () {
+    const token = localStorage.getItem('token')
+    if (token) {
+      this.$store.dispatch('user/loginByToken', token)
+        .then(secuses => {
+          if (secuses) {
+            const token = this.$store.state.user.user.token
+            localStorage.setItem('token', token)
+          } else {
+            localStorage.removeItem('token')
+          }
+        })
     }
   }
 }

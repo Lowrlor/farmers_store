@@ -22,6 +22,7 @@ userSchema.path('email').validate(function (value, respond) {
 }, 'Email already exists.');
 userSchema.pre("save", function(next) {
     this.role = 1
+    this.email = this.email.trim()
     next()
 });
 module.exports = mongoose.model("User", userSchema)

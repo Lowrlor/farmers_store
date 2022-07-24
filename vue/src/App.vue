@@ -1,8 +1,7 @@
 <template lang='pug'>
-.wraper
-  a(href='/NewProduct') NewProduct
-  a(href='/') Main
+.wrapper.wraper-top
   PagesTop
+.wrapper.wraper-body
   <router-view/>
 </template>
 
@@ -61,6 +60,10 @@ img
   margin-right: auto
   padding-left: $gap / 2 / 16 * 1rem
   padding-right: $gap / 2 / 16 * 1rem
+.wraper-top
+  margin: 10px
+.wraper-body
+  margin: 50px
 .row
   display: flex
   flex-wrap: wrap

@@ -4,9 +4,7 @@ var jwt = require('jsonwebtoken')
 const UserSchema = require('../models/user.models.js')
 
 exports.register = function (req, res) {
-  console.log(req.body)
   if (!req.body.email || !req.body.password) res.sendStatus(500)
-  console.log(req.body)
   var user = req.body
   const doc = new UserSchema({
     email: req.body.email,
@@ -23,15 +21,14 @@ exports.login = function (req, res) {
     .then((user) => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = generateToken(user);
-        console.log(user)
-        res.status(200).json({
+        res.send({
           user: {
-            user_id: user._id,
+            id: user._id,
             email: user.email,
             role: user.role,
-            token: token
+            token: generateToken(user)
           }
-        });
+        })
       } else {
         res.sendStatus(401)
       }
@@ -40,16 +37,59 @@ exports.login = function (req, res) {
       console.log(err)
       res.sendStatus(500)
     });
-    function generateToken(user) {
-      const payload = {
-        userid: user._id,
-        username: user.username,
-      };
-      const options = {
-        expiresIn: "1h",
-      };
-      const token = jwt.sign(payload, process.env.JWT_SECRET, options);
-
-      return token;
+}
+exports.loginbytoken = (req, res, next) => {
+    const token = req.headers.authorization;
+    if (token) {
+        jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+            if (err) {
+                return res.sendStatus(403);
+            }
+            UserSchema.findById(user.userid)
+              .then((user) => {
+                res.send({
+                  user: {
+                    id: user._id,
+                    email: user.email,
+                    role: user.role,
+                    token: generateToken(user)
+                  }
+                })
+              })
+        });
+    } else {
+        res.sendStatus(401);
     }
+}
+exports.adminverefi = (req, res, next) => {
+  UserSchema.findById(req.body.userid)
+    .then((user) => {
+      console.log(user)
+      if (user.role < 1) {
+        console.log('here')
+        res.send({ token: generateToken(user) })
+      } else {
+        res.sendStatus(403)
+      }
+
+    })
+}
+exports.logout = (req, res, next) => {
+  const user = req.body
+  console.log(user);
+  generateToken(user)
+  res.sendStatus(200)
+}
+
+function generateToken(user) {
+  const payload = {
+    userid: user._id,
+    username: user.username,
+  };
+  const options = {
+    expiresIn: 3600
+  };
+  const token = jwt.sign(payload, process.env.JWT_SECRET, options);
+
+  return token;
 }
