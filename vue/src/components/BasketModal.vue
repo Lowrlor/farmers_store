@@ -81,9 +81,6 @@ export default {
           })
         })
     }
-  },
-  afterMount () {
-    console.log('here')
   }
 }
 </script>

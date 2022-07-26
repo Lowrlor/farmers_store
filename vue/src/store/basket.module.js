@@ -8,24 +8,18 @@ export default {
   },
   mutations: {
     ADDTOBASKETLIST (state, product) {
-      if (state.basketList.length === 0) {
-        console.log('asdasd')
+      let alreadyexist = false
+      state.basketList.forEach((item, i) => {
+        if (product.name === item.name) {
+          state.basketList[i].cost += product.cost
+          state.basketList[i].weight += product.weight
+          alreadyexist = true
+        }
+      })
+      if (!alreadyexist) {
         state.basketList.push(product)
-        state.total = state.basketList[0].cost
-      } else {
-        state.basketList.push(product)
-        state.basketList.forEach((item, i) => {
-          for (let j = 0; j < state.basketList.length; j++) {
-            if (item.name === state.basketList[j].name && i !== j) {
-              state.basketList[i].cost += state.basketList[j].cost
-              state.basketList[i].weight += state.basketList[j].weight
-              state.basketList[i].weight.toFixed(2)
-              state.basketList.splice(j, 1)
-              state.total = state.basketList[i].cost
-            }
-          }
-        })
       }
+      state.total += product.cost
     },
     SETBASKETLIST (state, products) {
       products.forEach((item, i) => {
@@ -64,7 +58,7 @@ export default {
       commit('REMOVEALLFROMBUSKET')
     },
     createOrder ({ commit }, basketList) {
-      return axios.post('/testCreate', { basketList })
+      return axios.post('/stripePayment', { basketList })
         .then((res) => {
           commit('REMOVEALLFROMBUSKET')
           return res.data
