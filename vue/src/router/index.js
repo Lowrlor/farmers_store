@@ -34,9 +34,8 @@ const routes = [
       const token = localStorage.getItem('token')
       if (token) {
         store.dispatch('user/loginByToken', token)
-          .then(() => {
-            const userid = store.state.user.user.id
-            console.log(store.state.user.user)
+          .then((res) => {
+            const userid = res.userId
             store.dispatch('user/adminverefi', { userid, token })
               .then((res) => {
                 if (!res) {

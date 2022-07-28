@@ -12,7 +12,7 @@ exports.register = function (req, res) {
   })
   doc.save((err) => {
     if (err) return res.sendStatus(400)
-    else res.json({secuses: true, user: req.body})
+    else res.json({id: doc._id, secuses: true, user: req.body})
   })
 }
 exports.login = function (req, res) {

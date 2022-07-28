@@ -25,13 +25,17 @@ export default {
   methods: {
     login (user) {
       this.$store.dispatch('user/login', user)
-        .then(secuses => {
-          if (secuses) {
+        .then((res) => {
+          if (res.secuses) {
+            this.getBasketList(res.userId)
             const token = this.$store.state.user.user.token
             localStorage.setItem('token', token)
             this.$router.push('/')
           }
         })
+    },
+    getBasketList (userId) {
+      this.$store.dispatch('basket/getBasketList', userId)
     }
   }
 }

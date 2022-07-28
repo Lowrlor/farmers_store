@@ -10,8 +10,8 @@
           .input-product-weight
             p Грам: {{ product.weight }}
             input(type='number' v-model='product.weight' step='100' min='100')
-          .button-addToBasket(v-if='product.weight > 300 && !isUpdating')
-            button(@click='addToBacketList(product._id, product.cost * product.weight / 1000, product.weight)').button-addToBasket Добавити в корзину
+          .button-addToBasket(v-if='product.weight > 300 && !isUpdating && isAuth')
+            button(@click='addToBacketList(product, product.cost * product.weight / 1000, product.weight)').button-addToBasket Добавити в корзину
           .button-admin(v-if='isUpdating')
             .button-removeProduct
               button(@click='removeProduct(index, product._id, product.cost * product.weight / 1000)') Видалити
@@ -55,24 +55,17 @@ export default {
       } else {
         return false
       }
+    },
+    isAuth () {
+      if (this.$store.state.user.user) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   mounted () {
     this.getProductList()
-    if (localStorage.getItem('list')) {
-      if (JSON.parse(localStorage.getItem('list')).length <= 0) {
-        localStorage.setItem('list', JSON.stringify([]))
-      } else {
-        this.setBacketList(JSON.parse(localStorage.getItem('list')))
-      }
-    } else {
-      localStorage.setItem('list', JSON.stringify([]))
-    }
-    if (!localStorage.getItem('total')) {
-      localStorage.setItem('total', 0)
-    } else {
-      this.$store.state.basket.total = parseInt(localStorage.getItem('total'))
-    }
   },
   methods: {
     getProductList () {
@@ -84,15 +77,10 @@ export default {
           console.log(err)
         })
     },
-    addToBacketList (productId, productCost, productWeight) {
-      this.$store.dispatch('basket/addToBasketList', { productId, productCost, productWeight })
-        .then(() => {
-          localStorage.setItem('list', JSON.stringify(this.$store.state.basket.basketList))
-          localStorage.setItem('total', this.$store.state.basket.total)
-        })
-    },
-    setBacketList (products) {
-      this.$store.dispatch('basket/setBasketList', products)
+    addToBacketList (product, productCost, productWeight) {
+      product.cost = productCost
+      product.weight = productWeight
+      this.$store.dispatch('basket/addToBasketList', { userId: this.$store.state.user.user.id, product })
     },
     removeProduct (index, _id, productCost) {
       this.$store.dispatch('product/removeProduct', { index, _id })

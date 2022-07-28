@@ -1,6 +1,5 @@
 <template lang='pug'>
 ProductList
-p {{ user }}
 </template>
 
 <script>
@@ -17,9 +16,6 @@ export default {
     }
   },
   computed: {
-    user () {
-      return this.$store.state.user.user
-    },
     isAdmin () {
       if (this.$store.state.user.user) {
         if (this.$store.state.user.user.role < 1) {
@@ -32,20 +28,24 @@ export default {
       }
     }
   },
-  methods: {
-  },
-  mounted () {
+  beforeCreate () {
     const token = localStorage.getItem('token')
     if (token) {
       this.$store.dispatch('user/loginByToken', token)
-        .then(secuses => {
-          if (secuses) {
+        .then((res) => {
+          if (res.secuses) {
+            this.getBasketList(res.userId)
             const token = this.$store.state.user.user.token
             localStorage.setItem('token', token)
           } else {
             localStorage.removeItem('token')
           }
         })
+    }
+  },
+  methods: {
+    getBasketList (userId) {
+      this.$store.dispatch('basket/getBasketList', userId)
     }
   }
 }

@@ -8,23 +8,14 @@ export default {
   },
   mutations: {
     ADDTOBASKETLIST (state, product) {
-      let alreadyexist = false
-      state.basketList.forEach((item, i) => {
-        if (product.name === item.name) {
-          state.basketList[i].cost += product.cost
-          state.basketList[i].weight += product.weight
-          alreadyexist = true
-        }
-      })
-      if (!alreadyexist) {
-        state.basketList.push(product)
-      }
-      state.total += product.cost
+      state.total = product.total
+      state.basketList = product.list
     },
-    SETBASKETLIST (state, products) {
-      products.forEach((item, i) => {
+    SETBASKETLIST (state, list) {
+      list.list.forEach((item, i) => {
         state.basketList.push(item)
       })
+      state.total = list.total
     },
     REMOVEFROMBUSKET (state, payload) {
       state.basketList.splice(payload.index, 1)
@@ -34,28 +25,51 @@ export default {
     REMOVEALLFROMBUSKET (state) {
       state.basketList.splice(0, state.basketList.length)
       state.total = 0
-    },
-    CREATEORDER (state) {
     }
   },
   actions: {
     addToBasketList ({ commit }, payload) {
-      return axios.get('/getOne/' + payload.productId + '/' + payload.productCost + '/' + payload.productWeight)
+      return axios.post('/basket/addProduct/' + payload.userId, { product: payload.product })
         .then((res) => {
+          console.log(res)
           commit('ADDTOBASKETLIST', res.data)
         })
         .catch(err => {
           console.log(err)
         })
     },
-    setBasketList ({ commit }, products) {
-      commit('SETBASKETLIST', products)
+    getBasketList ({ commit }, userId) {
+      return axios.get('/basket/get/' + userId)
+        .then((res) => {
+          commit('SETBASKETLIST', res.data)
+        })
+    },
+    createBasketList ({ commit }, userId) {
+      return axios.get('/basket/create/' + userId)
+        .then((res) => {
+          commit('SETBASKETLIST', res.data.list)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     removeFromBasket ({ commit }, payment) {
-      commit('REMOVEFROMBUSKET', payment)
+      return axios.post('/basket/removeone/' + payment.userId + '/' + payment.index + '/' + payment.productCost, '')
+        .then((res) => {
+          commit('REMOVEFROMBUSKET', payment)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
-    removeAllFromBasket ({ commit }) {
-      commit('REMOVEALLFROMBUSKET')
+    removeAllFromBasket ({ commit }, payment) {
+      return axios.post('/basket/removeAll/' + payment.userId, '')
+        .then((res) => {
+          commit('REMOVEALLFROMBUSKET')
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     createOrder ({ commit }, basketList) {
       return axios.post('/stripePayment', { basketList })

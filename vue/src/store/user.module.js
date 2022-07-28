@@ -19,7 +19,7 @@ export default {
     register ({ commit }, user) {
       return axios.post('/register', user)
         .then((res) => {
-          return true
+          return { secuses: true, userId: res.data.id }
         })
         .catch(err => {
           console.log(err)
@@ -30,7 +30,7 @@ export default {
       return axios.post('/login', user)
         .then((res) => {
           commit('SETUSER', res.data.user)
-          return true
+          return { secuses: true, userId: res.data.user.id }
         })
         .catch(err => {
           console.log(err)
@@ -40,7 +40,7 @@ export default {
       return axios.post('/loginbytoken', '', { headers: { authorization: token } })
         .then((res) => {
           commit('SETUSER', res.data.user)
-          return true
+          return { secuses: true, userId: res.data.user.id }
         })
         .catch(err => {
           console.log(err)

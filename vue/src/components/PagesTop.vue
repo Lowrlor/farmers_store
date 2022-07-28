@@ -52,11 +52,9 @@ export default {
   },
   methods: {
     modalControll (showingModal) {
-      console.log(showingModal)
       if (showingModal) {
         this.showingModal = false
         document.body.style.overflow = 'auto'
-        console.log(showingModal)
       } else {
         this.showingModal = true
         document.body.style.overflow = 'hidden'

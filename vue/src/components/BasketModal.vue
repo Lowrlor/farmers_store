@@ -29,15 +29,21 @@ export default {
   name: 'BasketModal',
   data () {
     return {
-      basketList: this.$store.state.basket.basketList
     }
   },
   emits: [
-    'modalControll'
+    'modalControll',
+    'modal-Controll'
   ],
   computed: {
     basketTotal () {
       return this.$store.state.basket.total
+    },
+    basketList () {
+      return this.$store.state.basket.basketList
+    },
+    userId () {
+      return this.$store.state.user.user.id
     }
   },
   props: {
@@ -49,28 +55,15 @@ export default {
       document.body.style.overflow = 'auto'
     },
     removeFromBasket (index, productCost) {
-      this.$store.dispatch('basket/removeFromBasket', { index, productCost })
-        .then(() => {
-          const array = JSON.parse(localStorage.getItem('list'))
-          array.splice(index, 1)
-          localStorage.setItem('list', JSON.stringify(array))
-          let total = parseInt(localStorage.getItem('total'))
-          total -= parseInt(productCost)
-          localStorage.setItem('total', total)
-        })
+      this.$store.dispatch('basket/removeFromBasket', { userId: this.userId, index, productCost })
     },
     removeAllFromBasket () {
-      this.$store.dispatch('basket/removeAllFromBasket')
-        .then(() => {
-          localStorage.setItem('list', JSON.stringify([]))
-          localStorage.setItem('total', 0)
-        })
+      this.$store.dispatch('basket/removeAllFromBasket', { userId: this.userId })
     },
     async createOrder (basketList) {
       const stripeInit = loadStripe(process.env.VUE_APP_VITE_STRIPE_KEY)
       this.$store.dispatch('basket/createOrder', basketList)
         .then((res) => {
-          console.log(res)
           stripeInit.then(stripe => {
             stripe.redirectToCheckout({
               sessionId: res.id

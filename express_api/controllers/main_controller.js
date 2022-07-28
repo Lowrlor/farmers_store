@@ -117,13 +117,3 @@ exports.stripePayment = function (req, res) {
     });
   })
 }
-exports.getOne = function (req, res) {
-  console.log(req.params._id)
-  ProductSchema.findOne({_id: req.params._id}, function (err, product) {
-    if (err) return handleError(err)
-    console.log(req.params.cost)
-    product.weight = req.params.weight
-    product.cost = req.params.cost
-    res.send(product).status(200)
-  })
-}

@@ -25,8 +25,9 @@ export default {
   methods: {
     register (user) {
       this.$store.dispatch('user/register', user)
-        .then(secuses => {
-          if (secuses) {
+        .then(data => {
+          if (data.secuses) {
+            this.$store.dispatch('basket/createBasketList', data.userId)
             this.$router.push('/')
           }
         })
