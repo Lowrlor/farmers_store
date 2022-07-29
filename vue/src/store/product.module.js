@@ -2,7 +2,8 @@ import axios from 'axios'
 export default {
   namespaced: true,
   state: {
-    list: []
+    list: [],
+    filteredList: []
   },
   mutations: {
     GETPRODUCTLIST (state, productlist) {

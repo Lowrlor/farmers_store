@@ -1,8 +1,12 @@
 <template lang='pug'>
 .products
+  .filterMenu
+    li(v-for="item in categoryArray")
+      input(type='checkbox' v-bind:value="item" @input='filter(item)')
+      span() {{ item }}
   .row
     ul(v-for="product, index in productList" :key='product._id').col.col-desktop-1-4.col-tablets-1-3.col-phone-1-2.m-b-1
-      .product
+      .product()
         template(v-if='!isEditing || editingIndex != index')
           img( :src="'http://localhost:2000/' + product.img").img
           .product-name Назва: {{ product.name }}
@@ -42,10 +46,10 @@ export default {
   },
   data () {
     return {
-      productList: [],
       isEditing: false,
       editingIndex: -1,
-      newImg: undefined
+      newImg: undefined,
+      categoryList: []
     }
   },
   computed: {
@@ -62,6 +66,32 @@ export default {
       } else {
         return false
       }
+    },
+    categoryArray () {
+      const list = this.$store.state.product.list
+      const categoryArray = []
+      list.forEach((item, i) => {
+        if (!categoryArray.includes(item.category)) {
+          categoryArray.push(item.category)
+        }
+      })
+      return categoryArray
+    },
+    productList () {
+      const list = this.$store.state.product.list
+      var filteredList = []
+      const categoryList = this.categoryList
+      list.forEach((item, i) => {
+        categoryList.forEach((category, k) => {
+          if (item.category.includes(category)) {
+            filteredList.push(list[i])
+          }
+        })
+      })
+      if (categoryList.length === 0) {
+        filteredList = list
+      }
+      return filteredList
     }
   },
   mounted () {
@@ -71,7 +101,7 @@ export default {
     getProductList () {
       this.$store.dispatch('product/getProductList')
         .then(() => {
-          this.productList = this.$store.state.product.list
+          // this.productList = this.$store.state.product.list
         })
         .catch(err => {
           console.log(err)
@@ -99,6 +129,21 @@ export default {
       const files = e.target.files || e.dataTransfer.files
       if (!files.length) return
       this.newImg = files[0]
+    },
+    filter (name) {
+      if (this.categoryList.length > 0) {
+        this.categoryList.forEach((item, i) => {
+          if (item === name) {
+            var index = this.categoryList.findIndex(element => element === name)
+            this.categoryList.splice(index, 1)
+            this.categoryList = this.categoryList.splice(index, 1)
+          } else {
+            this.categoryList.push(name)
+          }
+        })
+      } else {
+        this.categoryList.push(name)
+      }
     }
   }
 }

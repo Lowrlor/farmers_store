@@ -33,13 +33,16 @@ export default {
     if (token) {
       this.$store.dispatch('user/loginByToken', token)
         .then((res) => {
-          if (res.secuses) {
+          if (res && res.secuses) {
             this.getBasketList(res.userId)
             const token = this.$store.state.user.user.token
             localStorage.setItem('token', token)
           } else {
             localStorage.removeItem('token')
           }
+        })
+        .catch(err => {
+          console.log(err)
         })
     }
   },
