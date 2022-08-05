@@ -1,9 +1,10 @@
 <template lang='pug'>
-.products
-  .filterMenu
-    li(v-for="item in categoryArray")
+.filterMenu
+  ul(v-for="item in categoryArray").filterMenu--item.noselect
+    label()
       input(type='checkbox' v-bind:value="item" @input='filter(item)')
-      span() {{ item }}
+      span {{ item }}
+.products
   .row
     ul(v-for="product, index in productList" :key='product._id').col.col-desktop-1-4.col-tablets-1-3.col-phone-1-2.m-b-1
       .product()
@@ -16,7 +17,7 @@
             input(type='number' v-model='product.weight' step='100' min='100')
           .button-addToBasket(v-if='product.weight > 300 && !isUpdating && isAuth')
             button(@click='addToBacketList(product, product.cost * product.weight / 1000, product.weight)').button-addToBasket Добавити в корзину
-          .button-admin(v-if='isUpdating')
+          .button-admin(v-if='isAdmin')
             .button-removeProduct
               button(@click='removeProduct(index, product._id, product.cost * product.weight / 1000)') Видалити
             .button-edit
@@ -53,9 +54,13 @@ export default {
     }
   },
   computed: {
-    role () {
-      if (this.$store.state.user.user) {
-        return this.$store.state.user.user.role
+    isAdmin () {
+      if (this.isAuth) {
+        if (this.$store.state.user.user.role < 1) {
+          return true
+        } else {
+          return false
+        }
       } else {
         return false
       }
@@ -96,6 +101,7 @@ export default {
   },
   mounted () {
     this.getProductList()
+    console.log(this.isAdmin)
   },
   methods: {
     getProductList () {
@@ -144,6 +150,7 @@ export default {
       } else {
         this.categoryList.push(name)
       }
+      console.log(this.categoryList)
     }
   }
 }
@@ -151,6 +158,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang='sass'>
+.noselect
+  -webkit-touch-callout: none
+  -webkit-user-select: none
+  -khtml-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+.filterMenu
+  display: flex
+.filterMenu--item
+  margin: 10px
 .button-addToBasket
   height: 25px
   width: 150px

@@ -21,7 +21,7 @@ export default {
   },
   actions: {
     getProductList ({ commit }, productlist) {
-      return axios.get('/getList')
+      axios.get('/getList')
         .then((res) => {
           commit('GETPRODUCTLIST', res.data)
         })
@@ -50,7 +50,7 @@ export default {
         })
     },
     removeProduct ({ commit }, payload) {
-      return axios.post('/removeOne/' + payload._id)
+      axios.post('/removeOne/' + payload._id)
         .then(() => {
           commit('REMOVEPRODUCT', payload.index)
         })

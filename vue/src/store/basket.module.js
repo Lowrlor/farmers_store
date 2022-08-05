@@ -29,7 +29,7 @@ export default {
   },
   actions: {
     addToBasketList ({ commit }, payload) {
-      return axios.post('/basket/addProduct/' + payload.userId, { product: payload.product })
+      axios.post('/basket/addProduct/' + payload.userId, { product: payload.product })
         .then((res) => {
           console.log(res)
           commit('ADDTOBASKETLIST', res.data)
@@ -39,13 +39,13 @@ export default {
         })
     },
     getBasketList ({ commit }, userId) {
-      return axios.get('/basket/get/' + userId)
+      axios.get('/basket/get/' + userId)
         .then((res) => {
           commit('SETBASKETLIST', res.data)
         })
     },
     createBasketList ({ commit }, userId) {
-      return axios.get('/basket/create/' + userId)
+      axios.get('/basket/create/' + userId)
         .then((res) => {
           commit('SETBASKETLIST', res.data.list)
         })
@@ -54,7 +54,7 @@ export default {
         })
     },
     removeFromBasket ({ commit }, payment) {
-      return axios.post('/basket/removeone/' + payment.userId + '/' + payment.index + '/' + payment.productCost, '')
+      axios.post('/basket/removeone/' + payment.userId + '/' + payment.index + '/' + payment.productCost, '')
         .then((res) => {
           commit('REMOVEFROMBUSKET', payment)
         })
@@ -63,7 +63,7 @@ export default {
         })
     },
     removeAllFromBasket ({ commit }, payment) {
-      return axios.post('/basket/removeAll/' + payment.userId, '')
+      axios.post('/basket/removeAll/' + payment.userId, '')
         .then((res) => {
           commit('REMOVEALLFROMBUSKET')
         })
@@ -72,7 +72,7 @@ export default {
         })
     },
     createOrder ({ commit }, basketList) {
-      return axios.post('/stripePayment', { basketList })
+      axios.post('/stripePayment', { basketList })
         .then((res) => {
           commit('REMOVEALLFROMBUSKET')
           return res.data

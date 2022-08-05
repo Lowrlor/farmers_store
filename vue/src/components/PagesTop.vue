@@ -1,18 +1,18 @@
 <template lang='pug'>
 .top
   .top-left
-    h1(@click='redirectTo("/")') Farmers
+    h1(@click='redirectTo("/")').pointCursor Farmers
   .top-right
     .admin-func
-      p(v-if='isAdmin' @click='redirectTo("/NewProduct")') NewProduct
+      p(v-if='isAdmin' @click='redirectTo("/NewProduct")').pointCursor NewProduct
     .cart
       BasketModal(:showingModal = 'showingModal' @modal-Controll='modalControll')
-      p(v-if='isAuth' @click='modalControll(showingModal)') Cart
+      p(v-if='isAuth' @click='modalControll(showingModal)').pointCursor Cart
     .auth-login-register(v-if='!isAuth')
-      p(@click='redirectTo("/auth/register")').register register
-      p(@click='redirectTo("/auth/login")').login login
+      p(@click='redirectTo("/auth/register")').register.pointCursor register
+      p(@click='redirectTo("/auth/login")').login.pointCursor login
     .auth-logout(v-if='isAuth')
-      p(@click='logout(this.$store.state.user.user)') logout
+      p(@click='logout(this.$store.state.user.user)').pointCursor logout
 </template>
 
 <script>
@@ -92,4 +92,6 @@ export default {
   display: flex
   .login, .register
     margin-left: 5px
+.pointCursor
+  cursor: pointer
 </style>

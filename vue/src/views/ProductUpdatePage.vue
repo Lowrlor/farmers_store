@@ -19,7 +19,6 @@ export default {
   },
   computed: {
     isAdmin () {
-      console.log(this.$store.state.user)
       if (this.$store.state.user.user.role < 1) {
         return true
       } else {
