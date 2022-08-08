@@ -75,5 +75,5 @@ img
   padding-right: $gap / 2 / 16 * 1rem
   min-height: 100%
 a
-  color: #42b983
+  color: #000
 </style>

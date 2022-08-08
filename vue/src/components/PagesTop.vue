@@ -1,18 +1,18 @@
 <template lang='pug'>
 .top
   .top-left
-    h1(@click='redirectTo("/")').pointCursor Farmers
+    h1(@click='redirectTo("/")').underline Farmers
   .top-right
     .admin-func
-      p(v-if='isAdmin' @click='redirectTo("/NewProduct")').pointCursor NewProduct
+      a(href='/NewProduct' v-if='isAdmin' @click='redirectTo("")') NewProduct
     .cart
       BasketModal(:showingModal = 'showingModal' @modal-Controll='modalControll')
-      p(v-if='isAuth' @click='modalControll(showingModal)').pointCursor Cart
+      p(v-if='isAuth' @click='modalControll(showingModal)').underline Cart
     .auth-login-register(v-if='!isAuth')
-      p(@click='redirectTo("/auth/register")').register.pointCursor register
-      p(@click='redirectTo("/auth/login")').login.pointCursor login
+      a(href='/auth/register').register.pointCursor register
+      a(href='/auth/login').login.pointCursor login
     .auth-logout(v-if='isAuth')
-      p(@click='logout(this.$store.state.user.user)').pointCursor logout
+      p(@click='logout(this.$store.state.user.user)').underline logout
 </template>
 
 <script>
@@ -70,6 +70,12 @@ export default {
             localStorage.removeItem('token')
           }
         })
+        .then(() => {
+          this.$router.go('/')
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 }
@@ -92,6 +98,12 @@ export default {
   display: flex
   .login, .register
     margin-left: 5px
-.pointCursor
+.underline
   cursor: pointer
+  &:hover
+    text-decoration: underline
+a
+   text-decoration: none
+   &:hover
+     text-decoration: underline
 </style>
