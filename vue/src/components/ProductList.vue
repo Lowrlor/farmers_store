@@ -1,5 +1,5 @@
 <template lang='pug'>
-.filterMenu
+.filterMenu.m-b-1
   ul(v-for="item in categoryArray").filterMenu--item.noselect
     label()
       input(type='checkbox' v-bind:value="item" @input='filter(item)')
@@ -7,7 +7,7 @@
 .products
   .row
     ul(v-for="product, index in productList" :key='product._id').col.col-desktop-1-4.col-tablets-1-3.col-phone-1-2.m-b-1
-      .product()
+      .product().m-b-1
         template(v-if='!isEditing || editingIndex != index')
           img( :src="'http://localhost:2000/' + product.img").img
           .product-name Назва: {{ product.name }}

@@ -3,16 +3,18 @@
   .top-left
     h1(@click='redirectTo("/")').underline Farmers
   .top-right
-    .admin-func
-      a(href='/NewProduct' v-if='isAdmin' @click='redirectTo("")') NewProduct
-    .cart
+    .admin-func(v-if='isAdmin')
+      a(href='/NewProduct' @click='redirectTo("")') NewProduct
+    .cart(v-if='isAuth')
       BasketModal(:showingModal = 'showingModal' @modal-Controll='modalControll')
-      p(v-if='isAuth' @click='modalControll(showingModal)').underline Cart
-    .auth-login-register(v-if='!isAuth')
-      a(href='/auth/register').register.pointCursor register
-      a(href='/auth/login').login.pointCursor login
-    .auth-logout(v-if='isAuth')
-      p(@click='logout(this.$store.state.user.user)').underline logout
+      p(@click='modalControll(showingModal)').underline Cart
+    .auth
+      .auth-register(v-if='!isAuth')
+        a(href='/auth/register') register
+      .auth-login(v-if='!isAuth')
+        a(href='/auth/login') login
+      .auth-logout(v-if='isAuth')
+        p(@click='logout(this.$store.state.user.user)').underline logout
 </template>
 
 <script>
@@ -93,11 +95,11 @@ export default {
 .top-right
   display: flex
 .top-right > *
-  margin: 5px
-.auth-login-register
+  margin: 5px 5px 5px 10px
+.auth
   display: flex
-  .login, .register
-    margin-left: 5px
+  .auth-login, .auth-register
+    margin-left: 10px
 .underline
   cursor: pointer
   &:hover

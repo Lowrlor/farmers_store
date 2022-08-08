@@ -1,6 +1,6 @@
 <template lang='pug'>
 .wrapper.wraper-top
-  PagesTop
+  PagesTop.m-b-3
 .wrapper.wraper-body
   <router-view/>
 </template>
@@ -63,7 +63,7 @@ img
 .wraper-top
   margin: 10px
 .wraper-body
-  margin: 50px
+  margin: 0px 50px 50px 50px
 .row
   display: flex
   flex-wrap: wrap
