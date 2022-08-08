@@ -24,7 +24,8 @@ $siteWidth: 1500
 $gap: 30
 $vstep: 15
 $breakpoint-tablet: 768px
-
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700;800&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap')
 @for $i from 1 through 10
   .m-b-#{$i}
     margin-bottom: $i * $vstep / 16 * 1rem
@@ -44,13 +45,13 @@ $breakpoint-tablet: 768px
     max-width: 100 / 3 * 1%
   .col-desktop-1-4
     max-width: 100 / 4 * 1%
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700;800&display=swap')
 *
   margin: 0
   padding: 0
   box-sizing: border-box
   font-family: 'Open Sans', sans-serif
   font-family: 'Comfortaa', cursive
+  // font-family: 'Space Grotesk', sans-serif
 img
   height: 250 / 16 * 1rem
   width: 200 / 16 * 1rem
@@ -62,6 +63,7 @@ img
   padding-right: $gap / 2 / 16 * 1rem
 .wraper-top
   margin: 10px
+  font-size: 18px
 .wraper-body
   margin: 0px 50px 50px 50px
 .row
