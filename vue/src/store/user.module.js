@@ -47,8 +47,7 @@ export default {
         })
     },
     adminverefi ({ commit }, data) {
-      console.log('here')
-      return axios.post('/adminverefi', { userid: data.userid }, { headers: { authorization: data.token } })
+      return axios.post('/adminverefi', { userid: this.state.user.user.id }, { headers: { authorization: this.state.user.user.token } })
         .then((res) => {
           commit('SETTOKEN', res.data)
           return true

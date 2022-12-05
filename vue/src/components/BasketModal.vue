@@ -3,11 +3,11 @@
   .modal(@click.stop)
     .modal-top
       .close(@click="closeModal")
-        p Close
+        p Закрити
       .button-removeAll
         button(@click='removeAllFromBasket()') Видалити все
       .button-createOrder
-        button(@click='createOrder(basketList)') Оплатити
+        SubmitModal()
       .total
         p {{ basketTotal }}
     .text(v-if='basketTotal < 20')
@@ -24,7 +24,8 @@
 </template>
 
 <script>
-import { loadStripe } from '@stripe/stripe-js'
+import SubmitModal from './SubmitModal.vue'
+
 export default {
   name: 'BasketModal',
   data () {
@@ -35,6 +36,9 @@ export default {
     'modalControll',
     'modal-Controll'
   ],
+  components: {
+    SubmitModal
+  },
   computed: {
     basketTotal () {
       return this.$store.state.basket.total
@@ -60,18 +64,10 @@ export default {
     removeAllFromBasket () {
       this.$store.dispatch('basket/removeAllFromBasket', { userId: this.userId })
     },
-    async createOrder (basketList) {
-      const stripeInit = loadStripe(process.env.VUE_APP_VITE_STRIPE_KEY)
-      this.$store.dispatch('basket/createOrder', basketList)
+    createOrder (basketList) {
+      this.$store.dispatch('order/create', basketList)
         .then((res) => {
-          stripeInit.then(stripe => {
-            stripe.redirectToCheckout({
-              sessionId: res.id
-            })
-              .catch(err => {
-                console.log(err)
-              })
-          })
+          console.log(res)
         })
     }
   }

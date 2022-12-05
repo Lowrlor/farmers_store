@@ -4,7 +4,7 @@ export default {
   state: {
     showingModal: false,
     basketList: [],
-    total: Number
+    total: 0
   },
   mutations: {
     ADDTOBASKETLIST (state, product) {
@@ -66,16 +66,6 @@ export default {
       axios.post('/basket/removeAll/' + payment.userId, '')
         .then((res) => {
           commit('REMOVEALLFROMBUSKET')
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
-    createOrder ({ commit }, basketList) {
-      axios.post('/stripePayment', { basketList })
-        .then((res) => {
-          commit('REMOVEALLFROMBUSKET')
-          return res.data
         })
         .catch(err => {
           console.log(err)

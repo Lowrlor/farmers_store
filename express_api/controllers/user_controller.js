@@ -87,7 +87,7 @@ function generateToken(user) {
     username: user.username,
   };
   const options = {
-    expiresIn: 3600
+    expiresIn: 10**10
   };
   const token = jwt.sign(payload, process.env.JWT_SECRET, options);
 

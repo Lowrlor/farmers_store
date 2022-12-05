@@ -23,6 +23,5 @@ router.post('/addNewProduct', upload.single('img'), main_controller.addNewProduc
 router.get('/getList', main_controller.getList)
 router.post('/removeOne/:_id', main_controller.removeOne)
 router.post('/updateOne', upload.single('img'), main_controller.updateOne)
-router.post('/stripePayment', main_controller.stripePayment)
 
 module.exports = router;

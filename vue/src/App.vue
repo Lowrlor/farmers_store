@@ -1,7 +1,7 @@
 <template lang='pug'>
-.wrapper.wraper-top
+.wrapper.wrapper-top
   PagesTop.m-b-3
-.wrapper.wraper-body
+.wrapper.wrapper-body
   <router-view/>
 </template>
 
@@ -30,12 +30,12 @@ $breakpoint-tablet: 768px
   .m-b-#{$i}
     margin-bottom: $i * $vstep / 16 * 1rem
 
-@media (min-width: 640px) and (max-width: 768px)
+@media (min-width: 640px) and (max-width: 860px)
   .col-phone-1-1
       max-width: 100 / 1 * 1%
   .col-phone-1-2
       max-width: 100 / 2 * 1%
-@media (min-width: 768px)
+@media (min-width: 860px)
   .col-tablets-1-2
     max-width: 100 / 2 * 1%
   .col-tablets-1-3
@@ -45,6 +45,13 @@ $breakpoint-tablet: 768px
     max-width: 100 / 3 * 1%
   .col-desktop-1-4
     max-width: 100 / 4 * 1%
+@media (min-width: 640px)
+  .float
+    float: left
+@media (max-width: 640px)
+  .filterMenu-mobile
+    display: flex
+    justify-content: center
 *
   margin: 0
   padding: 0
@@ -61,11 +68,11 @@ img
   margin-right: auto
   padding-left: $gap / 2 / 16 * 1rem
   padding-right: $gap / 2 / 16 * 1rem
-.wraper-top
+.wrapper-top
   margin: 10px
   font-size: 18px
-.wraper-body
-  margin: 0px 50px 50px 50px
+.wrapper-body
+  padding: 0 25px 25px 25px
 .row
   display: flex
   flex-wrap: wrap

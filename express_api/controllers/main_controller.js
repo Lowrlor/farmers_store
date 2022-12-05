@@ -19,12 +19,12 @@ exports.addNewProduct = function (req, res) {
   doc.save((err) => {
     if (err) return res.send(err).status(400)
     fs.copyFile('./tmp/' + req.body.filename, './img/' + req.body.name + '.jpeg', (err) => {
-      if (err) throw err
+      if (err) return res.sendStatus(400)
       console.log('File was copied to destination')
       fs.readdir('./tmp', function(err, items) {
         items.forEach(function(file) {
           fs.unlink('./tmp/' + file, function (err) {
-            if (err) throw err;
+            if (err) return res.sendStatus(400)
             console.log('Deleted ' + file)
           })
         })
@@ -84,36 +84,5 @@ exports.removeOne = function (req, res) {
     fs.unlink('./img/' + product.img, function () {
       return res.send(product).status(200)
     })
-  })
-}
-exports.stripePayment = function (req, res) {
-  var productsPrice = 0
-  var description = ''
-  req.body.basketList.forEach((item, i) => {
-    productsPrice += item.cost
-    description += item.name + ': ' + item.cost + ' UAH' + '\n'
-  })
-  const product = stripe.products.create({name: '#' + Math.floor(Math.random() * 10**10), description: description}, function (err, product) {
-    const price = stripe.prices.create({
-      unit_amount: productsPrice * 100,
-      currency: 'UAH',
-      product: product.id
-    },
-    function (err, prise) {
-      const session = stripe.checkout.sessions.create({
-        success_url: 'http://localhost:8080/',
-        cancel_url: 'http://localhost:8080/',
-        line_items: [
-          {
-            price: prise.id,
-            quantity: 1
-          },
-        ],
-        mode: 'payment'
-      },
-      function (err, session) {
-        res.send(session).status(200)
-      })
-    });
   })
 }

@@ -4,17 +4,20 @@
     h1(@click='redirectTo("/")').underline Farmers
   .top-right
     .admin-func(v-if='isAdmin')
-      a(href='/NewProduct' @click='redirectTo("")') NewProduct
+      a(href='/NewProduct') Дабавити новий продукт
     .cart(v-if='isAuth')
       BasketModal(:showingModal = 'showingModal' @modal-Controll='modalControll')
-      p(@click='modalControll(showingModal)').underline Cart
+      p(@click='modalControll(showingModal)').underline Корзина
+    .order(v-if='isAuth')
+      a(:href="/order/ + userid" v-if='!isAdmin').underline Замовлення
+      a(href='/orders/all' v-if='isAdmin').underline Замовлення
     .auth
       .auth-register(v-if='!isAuth')
-        a(href='/auth/register') register
+        a(href='/auth/register') Реєстрація
       .auth-login(v-if='!isAuth')
-        a(href='/auth/login') login
+        a(href='/auth/login') Вхід
       .auth-logout(v-if='isAuth')
-        p(@click='logout(this.$store.state.user.user)').underline logout
+        p(@click='logout(this.$store.state.user.user)').underline Вийти
 </template>
 
 <script>
@@ -38,6 +41,13 @@ export default {
         return true
       } else {
         return false
+      }
+    },
+    userid () {
+      if (this.$store.state.user.user.id) {
+        return this.$store.state.user.user.id
+      } else {
+        return null
       }
     },
     isAdmin () {
